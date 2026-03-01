@@ -1,14 +1,12 @@
 package com.example.drony.vyroba;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Sklad {
-    HashMap<String, Integer> items = new HashMap<>();
+    private final HashMap<String, Integer> items = new HashMap<>();
 
 
-    public synchronized boolean add(Objednavka[] itemToAdd) {
+    public synchronized void add(Objednavka[] itemToAdd) {
         for (Objednavka item : itemToAdd) {
             items.compute(
                     item.getItem(),
@@ -18,7 +16,6 @@ public class Sklad {
         }
 
 
-        return true;
     }
 
     public synchronized boolean take(Objednavka[] itemsToTake) {
