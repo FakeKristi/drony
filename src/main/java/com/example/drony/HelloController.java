@@ -39,21 +39,25 @@ public class HelloController {
                 onStopClick();
             });
         });
+
+        Logger.println("SYSTEM", "START");
+        vyroba.start();
     }
 
     private void onStopClick() {
+        Logger.println("SYSTEM", "STOP");
         vyroba.stop();
     }
 
     @FXML
     protected void onStartClick(ActionEvent actionEvent) {
         vyroba.start();
-        System.out.println("Výroba spuštěna");
+        Logger.println("USER", "START");
     }
 
     @FXML
     protected void onStopClick(ActionEvent actionEvent) {
         vyroba.stop();
-        System.out.println("Výroba ukončena");
+        Logger.println("USER", "STOP");
     }
 }

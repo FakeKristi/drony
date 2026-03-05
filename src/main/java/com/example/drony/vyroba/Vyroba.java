@@ -28,6 +28,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                new int[]{30},
                 "VYROBCE-RAM"
         );
 
@@ -41,6 +42,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                new int[]{30},
                 "VYROBCE-VRTULE"
         );
 
@@ -55,6 +57,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                new int[]{30},
                 "VYROBCE-DESKA"
         );
 
@@ -70,6 +73,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                new int[]{30},
                 "SESTAVITEL-DRONU-1"
         );
 
@@ -85,6 +89,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                new int[]{30},
                 "SESTAVITEL-DRONU-2"
         );
 

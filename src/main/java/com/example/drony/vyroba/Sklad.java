@@ -42,6 +42,18 @@ public class Sklad {
         updateList();
         return true;
     }
+    public synchronized boolean hasAll(Objednavka[] itemsCheck, int[] amounts) {
+        for (int i = 0; i < itemsCheck.length; i++) {
+            if (!items.containsKey(itemsCheck[i].getItem())) {
+                return false;
+            }
+            if (items.get(itemsCheck[i].getItem()) < amounts[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public void setData(ObservableList<Objednavka> data) {
         this.data = data;
