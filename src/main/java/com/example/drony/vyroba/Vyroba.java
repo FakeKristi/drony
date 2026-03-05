@@ -1,8 +1,14 @@
 package com.example.drony.vyroba;
 
+import java.util.ArrayList;
+
 public class Vyroba {
-    public static void main() {
-        Sklad sklad = new Sklad();
+
+    private Sklad sklad;
+    private ArrayList<Vyrobce> vyrobci = new ArrayList<>();
+
+    public Vyroba(Sklad sklad) {
+        this.sklad = sklad;
 
         sklad.add(new Objednavka[]{
                 new Objednavka("Hliník", 10000),
@@ -21,7 +27,8 @@ public class Vyroba {
                         new Objednavka("Rám", 1)
                 },
                 1000,
-                1000
+                1000,
+                "VYROBCE-RAM"
         );
 
         Vyrobce vyrobceVrtuli = new Vyrobce(
@@ -33,7 +40,8 @@ public class Vyroba {
                         new Objednavka("Sada vrtulí", 1)
                 },
                 1000,
-                1000
+                1000,
+                "VYROBCE-VRTULE"
         );
 
         Vyrobce vyrobceRidiciDesky = new Vyrobce(
@@ -46,23 +54,56 @@ public class Vyroba {
                         new Objednavka("Řídicí deska", 1)
                 },
                 1000,
-                1000
+                1000,
+                "VYROBCE-DESKA"
         );
 
         Vyrobce sestavitelDronu = new Vyrobce(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Rám", 1),
-                        new Objednavka("Sada  vrtulí", 1),
+                        new Objednavka("Sada vrtulí", 1),
                         new Objednavka("Řídicí deska", 1)
                 },
                 new Objednavka[]{
                         new Objednavka("Droní kit", 1)
                 },
                 1000,
-                1000
+                1000,
+                "SESTAVITEL-DRONU-1"
         );
 
+        Vyrobce sestavitelDronu2 = new Vyrobce(
+                sklad,
+                new Objednavka[]{
+                        new Objednavka("Rám", 1),
+                        new Objednavka("Sada vrtulí", 1),
+                        new Objednavka("Řídicí deska", 1)
+                },
+                new Objednavka[]{
+                        new Objednavka("Droní kit", 1)
+                },
+                1000,
+                1000,
+                "SESTAVITEL-DRONU-2"
+        );
 
+        vyrobci.add(vyrobceRamu);
+        vyrobci.add(vyrobceVrtuli);
+        vyrobci.add(vyrobceRidiciDesky);
+        vyrobci.add(sestavitelDronu);
+        vyrobci.add(sestavitelDronu2);
+    }
+
+    public void start() {
+        for (Vyrobce vyrobce : vyrobci) {
+            vyrobce.start();
+        }
+    }
+
+    public void stop() {
+        for (Vyrobce vyrobce : vyrobci) {
+            vyrobce.stop();
+        }
     }
 }

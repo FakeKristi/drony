@@ -1,10 +1,13 @@
 package com.example.drony.vyroba;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.HashMap;
 
 public class Sklad {
     private final HashMap<String, Integer> items = new HashMap<>();
-
+    private ObservableList<Objednavka> data = FXCollections.observableArrayList();
 
     public synchronized void add(Objednavka[] itemToAdd) {
         for (Objednavka item : itemToAdd) {
@@ -15,12 +18,15 @@ public class Sklad {
             );
         }
 
-
+        updateList();
     }
 
     public synchronized boolean take(Objednavka[] itemsToTake) {
         for (Objednavka item : itemsToTake) {
-            if (items.get(item.getItem()) < 0) {
+            if (!items.containsKey(item.getItem())) {
+                return false;
+            }
+            if (items.get(item.getItem())-item.getAmount() < 0) {
                 return false;
             }
         }
@@ -33,7 +39,17 @@ public class Sklad {
             );
         }
 
+        updateList();
         return true;
+    }
+
+    public void setData(ObservableList<Objednavka> data) {
+        this.data = data;
+    }
+
+    private void updateList() {
+        data.clear();
+        items.forEach((key, value) -> data.add(new Objednavka(key, value)));
     }
 
 

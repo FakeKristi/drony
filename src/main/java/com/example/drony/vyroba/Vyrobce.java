@@ -8,28 +8,35 @@ public class Vyrobce {
     int waittTime;
     Thread thread;
 
-    public Vyrobce(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime) {
+    public Vyrobce(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, String name) {
         this.sklad = sklad;
         this.material = material;
         this.product = product;
         this.buildTime = buildTime;
         this.waittTime = waittTime;
         thread =  new Thread(this::vyrobit);
+        thread.setName(name);
     }
 
     public void vyrobit() {
         while (!Thread.interrupted()) {
-            try {
+                System.out.println("Vyrabim: "+product[0].getItem());
                 if (sklad.take(material)) {
-                    Thread.sleep(buildTime);
+                    try {
+                        Thread.sleep(buildTime);
+                    } catch (InterruptedException e) {
+                        sklad.add(material);
+                        return;
+                    }
                     sklad.add(product);
                 } else {
-                    Thread.sleep(waittTime);
+                    System.out.println("Čeká na komponenty");
+                    try {
+                        Thread.sleep(waittTime);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
                 }
-            } catch (InterruptedException e) {
-                sklad.add(material);
-                throw new RuntimeException(e);
-            }
         }
     }
 
