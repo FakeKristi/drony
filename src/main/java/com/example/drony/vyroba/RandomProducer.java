@@ -10,6 +10,8 @@ public class RandomProducer extends GenericProducer implements IProducer {
         super(sklad, material, product, buildTime, waitTime, produceMessage, limit, name, onFinish);
     }
 
+    Objednavka[] actualProducts;
+
     Random rand  = new Random();
     @Override
     public void vyrobit() {
@@ -24,7 +26,7 @@ public class RandomProducer extends GenericProducer implements IProducer {
                         return;
                     }
 
-                    Objednavka[] actualProducts =  new Objednavka[product.length];
+                    actualProducts =  new Objednavka[product.length];
                     for (int i = 0; i < actualProducts.length; i++) {
                         actualProducts[i] = new Objednavka(product[i].getItem(), rand.nextInt(product[i].getAmount())+1);
                     }
@@ -32,7 +34,7 @@ public class RandomProducer extends GenericProducer implements IProducer {
 
                     sklad.add(actualProducts);
                     count++;
-                    Logger.println(Thread.currentThread().getName(), produceMessage + ": " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
+                    Logger.println(Thread.currentThread().getName(), produceMessage + ": " + printAmounts());
                     Logger.println(Thread.currentThread().getName(), sklad.toString());
                 } else {
                     Logger.println(Thread.currentThread().getName(), "čeká na materiál pro: " + product[0].getItem() + "");
@@ -52,6 +54,15 @@ public class RandomProducer extends GenericProducer implements IProducer {
                 }
             }
         }
+    }
+
+    private String printAmounts() {
+        StringBuilder sb = new StringBuilder();
+        for (Objednavka o : actualProducts) {
+            sb.append(o.getAmount()).append(" ").append(o.getItem()).append(" (celkem=").append(o.getAmount() * count).append("), ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        return sb.toString();
     }
 
 }

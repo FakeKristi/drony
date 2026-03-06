@@ -50,7 +50,7 @@ public class GenericProducer implements IProducer {
                     }
                     sklad.add(product);
                     count++;
-                    Logger.println(Thread.currentThread().getName(), produceMessage+": " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
+                    Logger.println(Thread.currentThread().getName(), produceMessage + ": " + printAmounts());
                     Logger.println(Thread.currentThread().getName(), sklad.toString());
                 } else {
                     Logger.println(Thread.currentThread().getName(), "čeká na materiál pro: " + product[0].getItem() + "");
@@ -72,14 +72,23 @@ public class GenericProducer implements IProducer {
         }
     }
 
+    private String printAmounts() {
+        StringBuilder sb = new StringBuilder();
+        for (Objednavka o : product) {
+            sb.append(o.getAmount()).append(" ").append(o.getItem()).append(" (celkem=").append(o.getAmount() * count).append(")");
+        }
+        return sb.toString();
+    }
+
     @Override
-    public void stats() {
+    public String stats() {
         StringBuilder sb = new StringBuilder();
         for (Objednavka p : product) {
             sb.append(p.getItem()).append(": ").append(p.getAmount() * count).append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        Logger.println(Thread.currentThread().getName(), sb.toString());
+        Logger.println(name, sb.toString());
+        return name+" "+sb.toString();
     }
 
     public void start() {

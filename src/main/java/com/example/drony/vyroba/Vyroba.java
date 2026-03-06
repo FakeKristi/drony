@@ -157,9 +157,12 @@ public class Vyroba {
         stop();
         stopped = true;
 
-        Logger.println("SYSTEM", "Statistics:");
+        StringBuilder sb = new StringBuilder("Statistics:\n");
+
         for (IProducer producer : producers) {
-            producer.stats();
+            sb.append(producer.stats()).append("\n");
+
         }
+        Logger.println("SYSTEM", sb.toString());
     }
 }
