@@ -1,17 +1,22 @@
-package com.example.drony.vyroba;
+package com.example.drony.vyroba.producers;
 
-public class Vyrobce {
-    Sklad sklad;
-    Objednavka[] material;
-    Objednavka[] product;
-    int buildTime;
-    int waittTime;
-    int[] limit;
-    Thread thread;
-    int count;
-    String name;
+import com.example.drony.vyroba.Logger;
+import com.example.drony.vyroba.Objednavka;
+import com.example.drony.vyroba.Sklad;
 
-    public Vyrobce(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, int[] limit, String name) {
+public class GenericProducer implements IProducer {
+    protected Sklad sklad;
+    protected Objednavka[] material;
+    protected Objednavka[] product;
+    protected int buildTime;
+    protected int waittTime;
+    protected int[] limit;
+    protected Thread thread;
+    protected int count;
+    protected String name;
+    protected Runnable onFinish;
+
+    public GenericProducer(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, int[] limit, String name,  Runnable onFinish) {
         this.sklad = sklad;
         this.material = material;
         this.product = product;
@@ -22,6 +27,8 @@ public class Vyrobce {
         }
         this.limit = limit;
         this.name = name;
+
+        this.onFinish = onFinish;
 
         count = 0;
         thread =  new Thread(this::vyrobit);
@@ -52,6 +59,7 @@ public class Vyrobce {
                     }
                 }
             } else {
+                onFinish.run();
                 Logger.println(Thread.currentThread().getName(), "pozastavil výrobu: " + product[0].getItem());
                 try {
                     Thread.sleep(waittTime);
@@ -60,6 +68,16 @@ public class Vyrobce {
                 }
             }
         }
+    }
+
+    @Override
+    public void stats() {
+        StringBuilder sb = new StringBuilder();
+        for (Objednavka p : product) {
+            sb.append(p.getItem()).append(": ").append(p.getAmount() * count).append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        Logger.println(Thread.currentThread().getName(), sb.toString());
     }
 
     public void start() {

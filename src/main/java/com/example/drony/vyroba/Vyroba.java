@@ -1,13 +1,17 @@
 package com.example.drony.vyroba;
 
+import com.example.drony.vyroba.producers.GenericProducer;
+import com.example.drony.vyroba.producers.IProducer;
+
 import java.util.ArrayList;
 
 public class Vyroba {
 
     private Sklad sklad;
-    private ArrayList<Vyrobce> vyrobci = new ArrayList<>();
+    private ArrayList<IProducer> producers = new ArrayList<>();
+    private boolean stopped;
 
-    public Vyroba(Sklad sklad) {
+    public Vyroba(Sklad sklad, int requirement) {
         this.sklad = sklad;
 
         sklad.add(new Objednavka[]{
@@ -17,8 +21,7 @@ public class Vyroba {
         });
 
 
-
-        Vyrobce vyrobceRamu = new Vyrobce(
+        IProducer genericProducerRamu = new GenericProducer(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Hliník", 60)
@@ -29,10 +32,11 @@ public class Vyroba {
                 1000,
                 1000,
                 new int[]{30},
-                "VYROBCE-RAM"
+                "VYROBCE-RAM",
+                () -> {}
         );
 
-        Vyrobce vyrobceVrtuli = new Vyrobce(
+        IProducer genericProducerVrtuli = new GenericProducer(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Plast", 30)
@@ -43,25 +47,28 @@ public class Vyroba {
                 1000,
                 1000,
                 new int[]{30},
-                "VYROBCE-VRTULE"
+                "VYROBCE-VRTULE",
+                () -> {}
         );
 
-        Vyrobce vyrobceRidiciDesky = new Vyrobce(
+        IProducer genericProducerRidiciDesky = new GenericProducer(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Čip", 2),
-                        new Objednavka("Hliník", 10)
+                        new Objednavka("Hliník", 10),
+                        new Objednavka("Plast", 5)
                 },
                 new Objednavka[]{
                         new Objednavka("Řídicí deska", 1)
                 },
-                1000,
+                2000,
                 1000,
                 new int[]{30},
-                "VYROBCE-DESKA"
+                "VYROBCE-DESKA",
+                () -> {}
         );
 
-        Vyrobce sestavitelDronu = new Vyrobce(
+        IProducer sestavitelDronu = new GenericProducer(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Rám", 1),
@@ -73,11 +80,12 @@ public class Vyroba {
                 },
                 1000,
                 1000,
-                new int[]{30},
-                "SESTAVITEL-DRONU-1"
+                new int[]{requirement},
+                "SESTAVITEL-DRONU-1",
+                this::finalStop
         );
 
-        Vyrobce sestavitelDronu2 = new Vyrobce(
+        IProducer sestavitelDronu2 = new GenericProducer(
                 sklad,
                 new Objednavka[]{
                         new Objednavka("Rám", 1),
@@ -89,26 +97,63 @@ public class Vyroba {
                 },
                 1000,
                 1000,
-                new int[]{30},
-                "SESTAVITEL-DRONU-2"
+                new int[]{requirement},
+                "SESTAVITEL-DRONU-2",
+                this::finalStop
         );
 
-        vyrobci.add(vyrobceRamu);
-        vyrobci.add(vyrobceVrtuli);
-        vyrobci.add(vyrobceRidiciDesky);
-        vyrobci.add(sestavitelDronu);
-        vyrobci.add(sestavitelDronu2);
+        IProducer skladnik = new RandomProducer(
+                sklad,
+                new Objednavka[]{},
+                new Objednavka[]{
+                        new Objednavka("Hliník", 100),
+                        new Objednavka("Plast", 100),
+                        new Objednavka("Čip", 100)
+                },
+                1000,
+                1000,
+                new int[]{1000000,1000000,1000000},
+                "Skladnik",
+                () -> {}
+        );
+
+        producers.add(genericProducerRamu);
+        producers.add(genericProducerVrtuli);
+        producers.add(genericProducerRidiciDesky);
+        producers.add(sestavitelDronu);
+        producers.add(sestavitelDronu2);
+        producers.add(skladnik);
     }
 
     public void start() {
-        for (Vyrobce vyrobce : vyrobci) {
-            vyrobce.start();
+        if (stopped) {
+            return;
+        }
+        for (IProducer genericProducer : producers) {
+            genericProducer.start();
         }
     }
 
     public void stop() {
-        for (Vyrobce vyrobce : vyrobci) {
-            vyrobce.stop();
+        if (stopped) {
+            return;
+        }
+        for (IProducer genericProducer : producers) {
+            genericProducer.stop();
+        }
+    }
+
+    public synchronized void finalStop() {
+        if (stopped) {
+            return;
+        }
+
+        stop();
+        stopped = true;
+
+        Logger.println("SYSTEM", "Statistics:");
+        for (IProducer producer : producers) {
+            producer.stats();
         }
     }
 }
