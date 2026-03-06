@@ -5,9 +5,10 @@ import javafx.collections.ObservableList;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Sklad {
-    private final HashMap<String, Integer> items = new HashMap<>();
+    private final ConcurrentHashMap<String, Integer> items = new ConcurrentHashMap<>();
     private ObservableList<Objednavka> data = FXCollections.observableArrayList();
 
     public synchronized void add(Objednavka[] itemToAdd) {
