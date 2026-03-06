@@ -10,18 +10,20 @@ public class GenericProducer implements IProducer {
     protected Objednavka[] product;
     protected int buildTime;
     protected int waittTime;
+    protected String produceMessage;
     protected int[] limit;
     protected Thread thread;
     protected int count;
     protected String name;
     protected Runnable onFinish;
 
-    public GenericProducer(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, int[] limit, String name,  Runnable onFinish) {
+    public GenericProducer(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, String produceMessage, int[] limit, String name,  Runnable onFinish) {
         this.sklad = sklad;
         this.material = material;
         this.product = product;
         this.buildTime = buildTime;
         this.waittTime = waittTime;
+        this.produceMessage = produceMessage;
         if (product.length != limit.length) {
             throw new IllegalArgumentException("Product and limit must have same length");
         }
@@ -48,7 +50,7 @@ public class GenericProducer implements IProducer {
                     }
                     sklad.add(product);
                     count++;
-                    Logger.println(Thread.currentThread().getName(), "vyrobil: " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
+                    Logger.println(Thread.currentThread().getName(), produceMessage+": " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
                     Logger.println(Thread.currentThread().getName(), sklad.toString());
                 } else {
                     Logger.println(Thread.currentThread().getName(), "čeká na materiál pro: " + product[0].getItem() + "");

@@ -6,8 +6,8 @@ import com.example.drony.vyroba.producers.IProducer;
 import java.util.Random;
 
 public class RandomProducer extends GenericProducer implements IProducer {
-    public RandomProducer(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waitTime, int[] limit, String name, Runnable onFinish) {
-        super(sklad, material,  product,  buildTime, waitTime, limit, name, onFinish);
+    public RandomProducer(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waitTime, String produceMessage, int[] limit, String name, Runnable onFinish) {
+        super(sklad, material, product, buildTime, waitTime, produceMessage, limit, name, onFinish);
     }
 
     Random rand  = new Random();
@@ -32,7 +32,7 @@ public class RandomProducer extends GenericProducer implements IProducer {
 
                     sklad.add(actualProducts);
                     count++;
-                    Logger.println(Thread.currentThread().getName(), "vyrobil: " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
+                    Logger.println(Thread.currentThread().getName(), produceMessage + ": " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
                     Logger.println(Thread.currentThread().getName(), sklad.toString());
                 } else {
                     Logger.println(Thread.currentThread().getName(), "čeká na materiál pro: " + product[0].getItem() + "");

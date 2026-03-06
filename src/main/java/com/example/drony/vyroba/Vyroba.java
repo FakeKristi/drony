@@ -31,6 +31,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                "vytvořil",
                 new int[]{30},
                 "VYROBCE-RAM",
                 () -> {}
@@ -46,6 +47,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                "vytvořil",
                 new int[]{30},
                 "VYROBCE-VRTULE",
                 () -> {}
@@ -63,6 +65,7 @@ public class Vyroba {
                 },
                 2000,
                 1000,
+                "vytvořil",
                 new int[]{30},
                 "VYROBCE-DESKA",
                 () -> {}
@@ -80,6 +83,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                "sestavil",
                 new int[]{requirement},
                 "SESTAVITEL-DRONU-1",
                 this::finalStop
@@ -97,6 +101,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                "sestavil",
                 new int[]{requirement},
                 "SESTAVITEL-DRONU-2",
                 this::finalStop
@@ -112,6 +117,7 @@ public class Vyroba {
                 },
                 1000,
                 1000,
+                "doplnil",
                 new int[]{1000000,1000000,1000000},
                 "Skladnik",
                 () -> {}
