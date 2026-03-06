@@ -60,6 +60,8 @@ public class Vyrobce {
     }
 
     public void start() {
+        stop();
+        thread = new Thread(this::vyrobit);
         thread.start();
     }
 
