@@ -40,6 +40,7 @@ public class Vyrobce {
                     sklad.add(product);
                     count++;
                     Logger.println(Thread.currentThread().getName(), "vyrobil: " + product[0].getItem() + " (celkem=" + (product[0].getAmount() * count) + ")");
+                    Logger.println(Thread.currentThread().getName(), sklad.toString());
                 } else {
                     Logger.println(Thread.currentThread().getName(), "čeká na materiál pro: " + product[0].getItem() + "");
                     try {

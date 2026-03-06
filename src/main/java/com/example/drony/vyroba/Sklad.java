@@ -64,5 +64,8 @@ public class Sklad {
         items.forEach((key, value) -> data.add(new Objednavka(key, value)));
     }
 
-
+    @Override
+    public String toString() {
+        return items.toString();
+    }
 }
