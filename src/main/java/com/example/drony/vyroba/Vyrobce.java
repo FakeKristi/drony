@@ -9,6 +9,7 @@ public class Vyrobce {
     int[] limit;
     Thread thread;
     int count;
+    String name;
 
     public Vyrobce(Sklad sklad, Objednavka[] material, Objednavka[] product, int buildTime, int waittTime, int[] limit, String name) {
         this.sklad = sklad;
@@ -20,6 +21,7 @@ public class Vyrobce {
             throw new IllegalArgumentException("Product and limit must have same length");
         }
         this.limit = limit;
+        this.name = name;
 
         count = 0;
         thread =  new Thread(this::vyrobit);
@@ -62,7 +64,9 @@ public class Vyrobce {
 
     public void start() {
         stop();
+
         thread = new Thread(this::vyrobit);
+        thread.setName(name);
         thread.start();
     }
 
